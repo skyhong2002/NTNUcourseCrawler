@@ -79,6 +79,7 @@ next_page = "https://mbasic.facebook.com/groups/143704482352660"
 fn = 'cookie.txt'
 cookie = load_cookie(fn)
 fn_links = 'next_pages.txt'
+fn_arts = 'articles.txt'
 fn_arts_links = 'articles_links.txt'
 
 count = 0
@@ -93,6 +94,16 @@ while True:
     n = random.randint(0, 5)
     sleep(n)
     res = req(next_page, cookie)
+
+    dates, articles = beauti4(res)
+    data = ''
+    for i in range(len(articles)):
+      data += articles[i] + "\n-----------------%s-----------------\n"%(dates[i])
+    print(data)
+
+    with open(fn_arts, 'a', encoding='utf-8') as f:
+      f.write(data)
+
     links = beauti6(res)
 
     data = "\n".join(links)+"\n"
