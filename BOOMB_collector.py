@@ -60,12 +60,16 @@ def beauti5(res):
 
 
 def beauti6(res):
+
   soup = BeautifulSoup(res.text, 'html.parser')
-  next_page = base + soup.find('div', id='m_group_stories_container').find_all('div')[-1].a['href']  
-  print((next_page))
+  articles = soup.find_all('article', class_='db dd dn')
+  links = [a.footer.find('a', text="完整動態")['href'].split('/?')[0] for a in articles[1:]]
+  #print(links)
+    #print(art, end='\n\n')
+  #print((articles[6].find('div', class_='dt').text))
   #title = soup.find('h1', class_='entry-title').text
 
-  return next_page
+  return links
 
 
 
@@ -75,7 +79,7 @@ next_page = "https://mbasic.facebook.com/groups/143704482352660"
 fn = 'cookie.txt'
 cookie = load_cookie(fn)
 fn_links = 'next_pages.txt'
-fn_arts = 'articles.txt'
+fn_arts_links = 'articles_links.txt'
 
 count = 0
 
@@ -89,15 +93,15 @@ while True:
     n = random.randint(0, 5)
     sleep(n)
     res = req(next_page, cookie)
-    dates, articles = beauti4(res)
-    data = ''
-    for i in range(len(articles)):
-      data += articles[i] + "\n-----------------%s-----------------\n"%(dates[i])
+    links = beauti6(res)
+
+    data = "\n".join(links)+"\n"
     print(data)
-    with open(fn_arts, 'a', encoding='utf-8') as f:
+    with open(fn_arts_links, 'a', encoding='utf-8') as f:
       f.write(data)
     with open(fn_links, 'a', encoding='utf-8') as f:
       f.write(next_page+'\n')
+    
     next_page = beauti5(res)
   except:
     sleep(10)
