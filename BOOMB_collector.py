@@ -20,7 +20,6 @@ def req(u, cookie):
                   'Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
                   'Accept-Language':'zh-TW,zh;q=0.8,en-US;q=0.5,en;q=0.3',
                   'Accept-Encoding':'gzip, deflate, br',
-                  'Referer':'https://mbasic.facebook.com/groups/143704482352660?bacr=1501228690%3A1580524982003929%3A1580524982003929%2C0%2C376%3A7%3AKw%3D%3D&multi_permalinks&refid=18',
                   'DNT':'1',
                   'Connection':'keep-alive',
                   'Cookie':cookie,
@@ -92,7 +91,7 @@ def beauti6(res):
 
 
 next_page = "https://mbasic.facebook.com/groups/143704482352660"
-next_page = "https://mbasic.facebook.com/groups/143704482352660?bacr=1501228690%3A1580524982003929%3A1580524982003929%2C0%2C376%3A7%3AKw%3D%3D&multi_permalinks&refid=18"
+next_page = "https://mbasic.facebook.com/groups/143704482352660?bacr=1502118351%3A1594155137307580%3A1594155137307580%2C0%2C375%3A7%3AKw%3D%3D&multi_permalinks&refid=18"
 
 fn = 'cookie.txt'
 cookie = load_cookie(fn)
@@ -105,13 +104,12 @@ count = 0
 while True:
   count += 1
   print('#'*10, count, '#'*10)
-  '''
+ 
   if count%30 == 0:
     n = random.randint(60, 180)
-    #sleep(30)
-  '''
-  n = random.randint(0, 5)
-  sleep(n)
+    sleep(n)
+  n = random.randint(5, 15)
+  sleep(0) #######
   res = req(next_page, cookie)
   with open("test.html", "wb") as f:
     f.write(res.content)
@@ -136,9 +134,11 @@ while True:
   next_page = beauti5(res)
   '''
   try:
-    n = random.randint(0, 5)
+    n = random.randint(5, 20)
     sleep(n)
     res = req(next_page, cookie)
+    with open("test.html", "w", encoding="latin-1") as f:
+      f.write(res.text)
 
     dates, articles = beauti4(res)
     data = ''
@@ -162,8 +162,9 @@ while True:
   except:
     sleep(10)
     continue
-
   '''
+
+
 
 
 
