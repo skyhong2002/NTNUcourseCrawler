@@ -9,24 +9,24 @@ def load_cookie(fn):
 
 def req(u, cookie):
   s = requests.Session()
-  s.headers.update({'Host':'mbasic.facebook.com',
-                  'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:95.0) Gecko/20100101 Firefox/95.0',
-                  'Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
-                  'Accept-Language':'zh-TW,zh;q=0.8,en-US;q=0.5,en;q=0.3',
-                  'Accept-Encoding':'gzip, deflate, br',
-                  'DNT':'1',
-                  'Connection':'keep-alive',
-                  'Cookie':cookie,
-                  'Upgrade-Insecure-Requests':'1',
-                  'Sec-Fetch-Dest':'document',
-                  'Sec-Fetch-Mode':'navigate',
-                  'Sec-Fetch-Site':'same-origin',
-                  'Sec-Fetch-User':'?1'})
+  s.headers.update({'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:61.0) Gecko/20100101 Firefox/61.0', 
+                    'Cookie':cookie})
   res = s.get(u)
-  
   return res
 
+def GetPostContent(result):
+  soup = BeautifulSoup(result.text, 'html.parser')
+  for br in soup.find_all("br"):
+    br.replace_with("\n")
+  post = soup.find('div', class_='bm')
+  article = post.find('div', style = True).text
+  return article
 
+  
+
+def GetPostComment(result):
+  base = 'https://mbasic.facebook.com'
+  return 0
 
 def beauti4(res):
 
@@ -82,7 +82,7 @@ def beauti6(res):
 
 def load_links():
   with open('articles_links.txt', 'r') as f:
-    return f.read().split()
+    return [i for i in f.read().split() if i]
 
 next_page = "https://mbasic.facebook.com/groups/143704482352660"
 
@@ -93,11 +93,23 @@ fn_arts = 'articles.txt'
 fn_arts_links = 'articles_links.txt'
 
 count = 0
+links = load_links()
+for link in links[18:20]:
+  sleep(5)
+  print(link)
+  result = req(link, cookie)
+  with open("post.html", "wb") as f:
+    f.write(result.content)
+  post_content = GetPostContent(result)
+  print(post_content)
+  
 
+
+'''
 while True:
   count += 1
   print('#'*10, count, '#'*10)
- 
+  
   if count%30 == 0:
     n = random.randint(60, 180)
     sleep(n)
@@ -125,7 +137,8 @@ while True:
     f.write(next_page+'\n')
     
   next_page = beauti5(res)
-  '''
+'''
+'''
   try:
     n = random.randint(5, 20)
     sleep(n)
@@ -156,11 +169,6 @@ while True:
     sleep(10)
     continue
   '''
-
-
-
-
-
 
 
 
