@@ -13,7 +13,7 @@ def load_links(link_filename):
 
 def req(url):
   print('loading', url)
-  fn = 'cookie.txt'
+  fn = 'cookie_EN.txt'
   with open(fn, 'r') as f:
     cookie = f.read()
   s = requests.Session()

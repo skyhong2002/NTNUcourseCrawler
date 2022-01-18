@@ -15,19 +15,8 @@ def load_cookie(fn):
 def req(u, cookie):
   
   s = requests.Session()
-  s.headers.update({'Host':'mbasic.facebook.com',
-                  'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:95.0) Gecko/20100101 Firefox/95.0',
-                  'Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
-                  'Accept-Language':'zh-TW,zh;q=0.8,en-US;q=0.5,en;q=0.3',
-                  'Accept-Encoding':'gzip, deflate, br',
-                  'DNT':'1',
-                  'Connection':'keep-alive',
-                  'Cookie':cookie,
-                  'Upgrade-Insecure-Requests':'1',
-                  'Sec-Fetch-Dest':'document',
-                  'Sec-Fetch-Mode':'navigate',
-                  'Sec-Fetch-Site':'same-origin',
-                  'Sec-Fetch-User':'?1'})
+  s.headers.update({'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:61.0) Gecko/20100101 Firefox/61.0', 
+                    'Cookie':cookie})
   res = s.get(u)
   
   return res
@@ -91,9 +80,9 @@ def beauti6(res):
 
 
 next_page = "https://mbasic.facebook.com/groups/143704482352660"
-next_page = "https://mbasic.facebook.com/groups/143704482352660?bacr=1502118351%3A1594155137307580%3A1594155137307580%2C0%2C375%3A7%3AKw%3D%3D&multi_permalinks&refid=18"
+next_page = "https://mbasic.facebook.com/groups/143704482352660?bacr=1632792366%3A4729877403735322%3A4729877403735322%2C0%2C34%3A7%3AKw%3D%3D&multi_permalinks&refid=18"
 
-fn = 'cookie.txt'
+fn = 'cookie_TW.txt'
 cookie = load_cookie(fn)
 fn_links = 'next_pages.txt'
 fn_arts = 'articles.txt'
@@ -109,7 +98,7 @@ while True:
     n = random.randint(60, 180)
     sleep(n)
   n = random.randint(5, 15)
-  sleep(0) #######
+  sleep(n) #######
   res = req(next_page, cookie)
   with open("test.html", "wb") as f:
     f.write(res.content)
