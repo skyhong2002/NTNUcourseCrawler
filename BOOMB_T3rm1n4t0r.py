@@ -76,7 +76,10 @@ if __name__ == '__main__':
   group_page = "https://mbasic.facebook.com/groups/143704482352660"
   fn_arts_links = 'articles_links.txt'
   links = load_links(fn_arts_links)
+  i = 0
   for link in links:
+    i = i+1
+    print(i, end=' ')
     permaID = link.split('/')[-1]
     if [filename for filename in os.listdir('post_content') if permaID in filename]: 
       print(permaID, 'exists. skip.')
