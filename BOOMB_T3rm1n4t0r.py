@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 from time import sleep
+import re
 import random
 
 def load_cookie(fn):
@@ -20,12 +21,24 @@ def GetPostContent(result):
     br.replace_with("\n")
   post = soup.find('div', class_='bm')
   article = post.find('div', style = True).text
-  return article
 
-  
+  reaction = [s for s in soup.find_all("a", href=True) if "/ufi/reaction/profile/browser" in s['href']][0].text
+
+  return article, reaction
 
 def GetPostComment(result):
   base = 'https://mbasic.facebook.com'
+  # if View previous comments… is found
+  # find result and rerun
+  soup = BeautifulSoup(result.text, 'html.parser')
+  soup = soup.find('div', id=re.compile('^ufi_*'))
+  comments = soup.find('div').find_all('div', id=re.compile('^\d'))
+  for comment in comments:
+    main_comment = comment.find('div').find('div').text
+    print(main_comment)
+    replied_comment_link = comment.find('div').find_all('a', id=re.compile('^u_0_*'))
+    for link in replied_comment_link:
+      print(base+link['href'])
   return 0
 
 def beauti4(res):
@@ -94,99 +107,13 @@ fn_arts_links = 'articles_links.txt'
 
 count = 0
 links = load_links()
-for link in links[18:20]:
+for link in links[87:90]:
   sleep(5)
   print(link)
   result = req(link, cookie)
   with open("post.html", "wb") as f:
     f.write(result.content)
-  post_content = GetPostContent(result)
-  print(post_content)
-  
-
-
-'''
-while True:
-  count += 1
-  print('#'*10, count, '#'*10)
-  
-  if count%30 == 0:
-    n = random.randint(60, 180)
-    sleep(n)
-  n = random.randint(5, 15)
-  sleep(0) #######
-  res = req(next_page, cookie)
-  with open("test.html", "wb") as f:
-    f.write(res.content)
-  dates, articles = beauti4(res)
-  data = ''
-  for i in range(len(articles)):
-    data += articles[i] + "\n-----------------%s-----------------\n"%(dates[i])
-  print(data)
-
-  with open(fn_arts, 'a', encoding='utf-8') as f:
-    f.write(data)
-
-  links = beauti6(res)
-
-  data = "\n".join(links)+"\n"
-  print(data)
-  with open(fn_arts_links, 'a', encoding='utf-8') as f:
-    f.write(data)
-  with open(fn_links, 'a', encoding='utf-8') as f:
-    f.write(next_page+'\n')
-    
-  next_page = beauti5(res)
-'''
-'''
-  try:
-    n = random.randint(5, 20)
-    sleep(n)
-    res = req(next_page, cookie)
-    with open("test.html", "w", encoding="latin-1") as f:
-      f.write(res.text)
-
-    dates, articles = beauti4(res)
-    data = ''
-    for i in range(len(articles)):
-      data += articles[i] + "\n-----------------%s-----------------\n"%(dates[i])
-    print(data)
-
-    with open(fn_arts, 'a', encoding='utf-8') as f:
-      f.write(data)
-
-    links = beauti6(res)
-
-    data = "\n".join(links)+"\n"
-    print(data)
-    with open(fn_arts_links, 'a', encoding='utf-8') as f:
-      f.write(data)
-    with open(fn_links, 'a', encoding='utf-8') as f:
-      f.write(next_page+'\n')
-    
-    next_page = beauti5(res)
-  except:
-    sleep(10)
-    continue
-  '''
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  # post_content, post_reaction = GetPostContent(result)
+  # print(post_content, post_reaction)
+  post_comment = GetPostComment(result)
 
