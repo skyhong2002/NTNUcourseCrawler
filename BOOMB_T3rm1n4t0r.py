@@ -22,7 +22,7 @@ def req(url):
   res = s.get(url)
   with open("last.html", "wb") as f:
     f.write(res.content)
-  sleep(random.randint(5,20))
+  # sleep(random.randint(5,20))
   return res
 
 def GetPostContent(result):
