@@ -3,9 +3,13 @@ import requests
 from bs4 import BeautifulSoup
 from time import sleep
 import re
-import xml.etree.cElementTree as ET
+from xml.dom import minidom
 import os
 import random
+
+def load_links(link_filename):
+  with open(link_filename, 'r') as f:
+    return [i for i in f.read().split() if i]
 
 def req(url):
   print('loading', url)
@@ -18,7 +22,7 @@ def req(url):
   res = s.get(url)
   with open("last.html", "wb") as f:
     f.write(res.content)
-  sleep(5)
+  sleep(random.randint(5,20))
   return res
 
 def GetPostContent(result):
@@ -57,16 +61,21 @@ def GetCommentRepiles(url):
     comment_text.append(comment.find('div').find('div').text)
   return comment_text
 
-def load_links():
-  with open('articles_links.txt', 'r') as f:
-    return [i for i in f.read().split() if i]
+
+def data2xml(permaID, post_content, post_reaction, post_comment):
+  xmlfile = minidom.Document()
+  node = xmlfile.createElement('d')
+  node.setAttribute('n'  , 'post_' + permaID)
+  node.setAttribute('book'  , permaID)
+  node_text = xmlfile.createTextNode(post_content)
+  node.appendChild(node_text)
+  xmlfile.appendChild(node)
+  return xmlfile
 
 if __name__ == '__main__':
   group_page = "https://mbasic.facebook.com/groups/143704482352660"
-  fn_links = 'next_pages.txt'
-  fn_arts = 'articles.txt'
   fn_arts_links = 'articles_links.txt'
-  links = load_links()
+  links = load_links(fn_arts_links)
   for link in links:
     permaID = link.split('/')[-1]
     if [filename for filename in os.listdir('post_content') if permaID in filename]: 
@@ -79,6 +88,14 @@ if __name__ == '__main__':
       post_content, post_reaction = GetPostContent(result)
       post_comment = GetPostComment(result)
       # print(link, post_content, post_reaction, post_comment)
+      with open('post_content' + os.sep + permaID + '.txt', 'w') as f:
+        f.write(post_content.replace('\n', ' ') + '\n')
+        f.write(post_reaction + '\n')
+        for comment in post_comment:
+          f.write(comment.replace('\n', ' ') + '\n')
+      '''xmlfile = data2xml(permaID, post_content, post_reaction, post_comment)
+      with open('post_content' + os.sep + permaID + '.xml', 'w') as f:
+        xmlfile.writexml(f, indent='\t', newl='\n', addindent='\t', encoding='utf-8')'''
     except:
       print("failed with loading ", link)
       sleep(5)
