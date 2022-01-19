@@ -75,17 +75,23 @@ def beauti6(res):
 
   return links
 
+def find_next_page(fn_links):
+  a = []
+  with open(fn_links, 'r', encoding='utf-8') as f:
+    a = [i for i in f.read().split() if i]
+  for i in reversed(a):
+    if 'https://' in i:
+      return i
+  return "https://mbasic.facebook.com/groups/143704482352660"
 
-
-
-
-next_page = "https://mbasic.facebook.com/groups/143704482352660"
-next_page = "https://mbasic.facebook.com/groups/143704482352660?bacr=1377529741%3A579992158723888%3A579992158723888%2C0%2C941%3A7%3AKw%3D%3D&multi_permalinks&refid=18"
 fn = 'cookie_TW.txt'
 cookie = load_cookie(fn)
-fn_links = 'next_pages.txt'
 fn_arts = 'articles.txt'
 fn_arts_links = 'articles_links.txt'
+fn_links = 'next_pages.txt'
+next_page = find_next_page(fn_links)
+print(next_page)
+
 
 count = 0
 
@@ -116,10 +122,10 @@ while True:
   print(data)
   with open(fn_arts_links, 'a', encoding='utf-8') as f:
     f.write(data)
-  with open(fn_links, 'a', encoding='utf-8') as f:
-    f.write(next_page+'\n')
     
   next_page = beauti5(res)
+  with open(fn_links, 'a', encoding='utf-8') as f:
+    f.write(next_page+'\n')
   '''
   try:
     n = random.randint(5, 20)
