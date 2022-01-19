@@ -80,7 +80,7 @@ def beauti6(res):
 
 
 next_page = "https://mbasic.facebook.com/groups/143704482352660"
-next_page = "https://mbasic.facebook.com/groups/143704482352660?bacr=1378557961%3A585850011471436%3A585850011471436%2C0%2C923%3A7%3AKw%3D%3D&multi_permalinks&refid=18"
+next_page = "https://mbasic.facebook.com/groups/143704482352660?bacr=1377529741%3A579992158723888%3A579992158723888%2C0%2C941%3A7%3AKw%3D%3D&multi_permalinks&refid=18"
 fn = 'cookie_TW.txt'
 cookie = load_cookie(fn)
 fn_links = 'next_pages.txt'

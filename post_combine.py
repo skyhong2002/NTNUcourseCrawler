@@ -25,10 +25,17 @@ def data2xml(permaID, post_content, post_reaction, post_comment):
   return xmlfile
 
 if __name__ == '__main__':
+  with open('allpost.xml', 'w') as f:
+    f.write('<?xml version="1.0" encoding="UTF-8"?><b n="articles_modified" book="">  <b n="articles_modified">\n')
   for filename in os.listdir('post_content'):
-      contents = load_links(filename)
-      print(contents[0])
-      with open('allpost.txt', 'a') as f:
-        for content in contents:
-          f.write(content + ' ')
-        f.write('\n')
+    with open('allpost.xml', 'a') as f:
+      f.write('<l>')
+    contents = load_links(filename)
+    for content in contents:
+      content = str(content).encode('utf-8','ignore').decode("utf-8")
+      with open('allpost.xml', 'a') as f:
+        f.write(content + ' ')
+    with open('allpost.xml', 'a') as f:
+      f.write('</l>\n')
+  with open('allpost.xml', 'a') as f:
+      f.write('</b></b>')
